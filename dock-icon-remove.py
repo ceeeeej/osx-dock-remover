@@ -16,14 +16,14 @@ def _remove_icon(user, positions):
 
 
 def _get_users():
-    command = "dscacheutil -q user | grep -A 3 -B 2 -e uid:\\ 5'[0-9][0-9]' | grep name"
+    command = "id -un"
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = p.communicate()
     out = out.strip()
     lines = out.split("\n")
-    users = []
-    for line in lines:
-        users.append(line.replace("name: ", "").strip())
+    users = lines
+    # for line in lines:
+    #     users.append(line.replace("name: ", "").strip())
     print "Users:", users
     return users
 
@@ -70,6 +70,7 @@ def main(argv):
     print "Removing", app_name, "icon from dock and ignoring:", app_ignore
 
     users = _get_users()
+
     for user in users:
         ignored_positions = set()
         doc_positions = _get_doc_icon_positions(app_name, user)
